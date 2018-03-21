@@ -4,7 +4,7 @@ Simple HTTP and WS test server suitable for embedding in your test harness.
 
 ## Common test example
 
-Install `hemlock` when running tests (`rebar.conf`, assuming `rebar3`):
+Install `hemlock` in your test profile (`rebar.conf`, assuming `rebar3`):
 
     {profiles, [
         {test, [
