@@ -4,10 +4,30 @@ Simple HTTP and WS test server suitable for embedding in your test harness.
 
 ## Common test example
 
-`rebar.conf` (assuming `rebar3`):
+Install `hemlock` when running tests (`rebar.conf`, assuming `rebar3`):
 
-`your_SUITE.erl`:
+    {profiles, [
+        {test, [
+            {deps, [
+                {hemlock, {git, "https://github.com/trelltech/hemlock.git"}}
+            ]}
+        ]}
+    ]}.
 
+Start hemlock with your suite (`your_SUITE.erl`):
+
+    init_per_suite(Config) ->
+        application:ensure_all_started(taser),
+        application:ensure_all_started(hemlock),
+        Config.
+
+    end_per_suite(_Config) ->
+        application:stop(hemlock),
+        ok.
+
+    my_test(_Config) ->
+        {ok, 200, _Headers, _Body} = taser:get("http://127.0.0.1:5000/get"),
+        ok.
 
 ## Supported HTTP endpoints
 
