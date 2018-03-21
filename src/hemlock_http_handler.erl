@@ -72,8 +72,16 @@ handle_method_dispatch(Path, #{ method := Method } = Req0, Obj) ->
         Method when ?is_safe_http_method(Method) ->
             {Req0, Obj, 200, #{}};
         Method when ?is_unsafe_http_method(Method) ->
-            {ok, Body, Req1} = read_body(Req0),
-            {Req1, Obj#{ data => Body }, 200, #{}};
+            case cowboy_req:parse_header(<<"content-type">>, Req0) of
+                {<<"multipart">>, <<"form-data">>, _} ->
+                    {Req0, Obj, 415, #{}};
+                {<<"application">>, <<"x-www-form-urlencoded">>, _} ->
+                    {ok, Form, Req1} = cowboy_req:read_urlencoded_body(Req0),
+                    {Req1, Obj#{ form => Form }, 200, #{}};
+                _Other ->
+                    {ok, Data, Req1} = read_body(Req0),
+                    {Req1, Obj#{ data => Data }, 200, #{}}
+            end;
         Other when ?is_safe_http_method(Other) ->
             {Req0, Obj, 405, #{}};
         Other when ?is_unsafe_http_method(Other) ->
