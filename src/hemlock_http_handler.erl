@@ -34,7 +34,7 @@ dispatch(method, Req0, Obj) ->
     Path = string:uppercase(cowboy_req:binding(method, Req0)),
     handle_method_dispatch(Path, Req0, Obj);
 
-dispatch(redirect, #{ method := <<"GET">> } = Req0, Obj) ->
+dispatch(redirect, Req0, Obj) ->
     case catch binary_to_integer(cowboy_req:binding(times, Req0)) of
         {'EXIT', {badarg, _}} ->
             {Req0, Obj, 400, #{}};
@@ -45,9 +45,6 @@ dispatch(redirect, #{ method := <<"GET">> } = Req0, Obj) ->
             {Req0, Obj, 302, #{ <<"location">> => Location }}
     end;
 
-dispatch(redirect, Req0, Obj) ->
-    {Req0, Obj, 405, #{}};
-
 dispatch(timeout, #{ method := Method } = Req0, Obj) ->
     case catch binary_to_integer(cowboy_req:binding(seconds, Req0)) of
         {'EXIT', {badarg, _}} ->
@@ -55,6 +52,16 @@ dispatch(timeout, #{ method := Method } = Req0, Obj) ->
         Timeout ->
             timer:sleep(Timeout * 1000),
             handle_method_dispatch(Method, Req0, Obj)
+    end;
+
+dispatch(auth, Req0, Obj) ->
+    User = cowboy_req:binding(user, Req0),
+    Password = cowboy_req:binding(password, Req0),
+    case cowboy_req:parse_header(<<"authorization">>, Req0) of
+        {basic, User, Password} ->
+            {Req0, Obj, 200, #{}};
+        _ ->
+            {Req0, Obj, 401, #{}}
     end;
 
 dispatch(_, Req0, Obj) ->
