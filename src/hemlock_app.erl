@@ -8,7 +8,9 @@ start(_StartType, _StartArgs) ->
     Dispatch = cowboy_router:compile([
         {'_', [
             {"/ws", hemlock_ws_handler, []},
-            {"/:method/[:arg]", hemlock_echo_handler, []}
+            {"/timeout/:seconds", hemlock_http_handler, [{route, timeout}]},
+            {"/redirect/:times", hemlock_http_handler, [{route, redirect}]},
+            {"/:method", hemlock_http_handler, [{route, method}]}
         ]}
     ]),
     {ok, _} = cowboy:start_clear(hemlock_http_listener,

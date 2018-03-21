@@ -1,6 +1,13 @@
 # hemlock
 
-Simple HTTP and WS test server.
+Simple HTTP and WS test server suitable for embedding in your test harness.
+
+## Common test example
+
+`rebar.conf` (assuming `rebar3`):
+
+`your_SUITE.erl`:
+
 
 ## Supported HTTP endpoints
 

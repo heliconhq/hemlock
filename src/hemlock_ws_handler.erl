@@ -24,8 +24,8 @@ websocket_handle({text, Msg}, #{ req := Req0 } = State) ->
 websocket_handle(_Data, State) ->
     {ok, State}.
 
-websocket_info(Info, State) ->
+websocket_info(_Info, State) ->
     {ok, State}.
 
-terminate(Reason, Req, State) ->
+terminate(_Reason, _Req, _State) ->
     ok.
