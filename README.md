@@ -31,42 +31,47 @@ Start hemlock with your suite (`your_SUITE.erl`):
 
 ## Supported HTTP endpoints
 
-### /get
+### `/get`
 
 Returns JSON encoded information about the request.
 
-### /head
+### `/head`
 
 Returns JSON encoded information about the request.
 
-### /options
+### `/options`
 
 Returns JSON encoded information about the request.
 
-### /post
+### `/post`
 
 Returns JSON encoded information about the request.
 
-### /put
+### `/put`
 
 Returns JSON encoded information about the request.
 
-### /patch
+### `/patch`
 
 Returns JSON encoded information about the request.
 
-### /delete
+### `/delete`
 
 Returns JSON encoded information about the request.
 
-### /timeout/n
+### `/timeout/<seconds>`
 
-Waits `n` seconds and returns JSON encoded information about the request.
+Waits `seconds` seconds and returns JSON encoded information about the request.
 
-### /redirect/n
+### `/redirect/<times>`
 
-Redirect (relative 302) `n` times and returns JSON encoded information about
-the request.
+Redirects (relative 302) client `times` times and returns JSON encoded
+information about the request.
+
+### `/auth/<user>/<password>`
+
+Performs basic auth with `user` and `password` as credentials and returns JSON
+encoded information about the request.
 
 ## WS endpoints
 
