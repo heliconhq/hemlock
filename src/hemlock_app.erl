@@ -11,11 +11,11 @@ start(_StartType, _StartArgs) ->
             {"/:method/[:arg]", hemlock_echo_handler, []}
         ]}
     ]),
-    {ok, _} = cowboy:start_clear(my_http_listener,
+    {ok, _} = cowboy:start_clear(hemlock_http_listener,
         [{port, 5000}],
         #{env => #{dispatch => Dispatch}}
     ),
     hemlock_sup:start_link().
 
 stop(_State) ->
-    ok.
+    cowboy:stop_listener(hemlock_http_listener).
