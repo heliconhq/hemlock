@@ -75,6 +75,6 @@ encoded information about the request.
 
 ## WS endpoints
 
-### /ws
+### `/ws`
 
 Echoes back what is sent and some additional data in a JSON encoded frame.
