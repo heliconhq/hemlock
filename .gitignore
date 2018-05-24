@@ -2,3 +2,4 @@
 /_checkouts
 /.rebar3
 /ebin
+/log
