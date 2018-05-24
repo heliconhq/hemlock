@@ -7,7 +7,14 @@
 -export([websocket_info/2]).
 
 init(Req, _Opts) ->
-    {cowboy_websocket, Req, #{ req => Req }}.
+    case cowboy_req:parse_header(<<"sec-websocket-protocol">>, Req) of
+        undefined ->
+            {cowboy_websocket, Req, #{ req => Req }};
+        [Subprotocol|_Rest] ->
+            Req1 = cowboy_req:set_resp_header(<<"sec-websocket-protocol">>,
+                                              Subprotocol, Req),
+            {cowboy_websocket, Req1, #{ req => Req1 }}
+    end.
 
 websocket_init(State) ->
     {ok, State}.
