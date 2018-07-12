@@ -64,6 +64,14 @@ dispatch(auth, Req0, Obj) ->
             {Req0, Obj, 401, #{}}
     end;
 
+dispatch(status, Req0, Obj) ->
+    case catch binary_to_integer(cowboy_req:binding(status_code, Req0)) of
+        {'EXIT', {badarg, _}} ->
+            {Req0, Obj, 400, #{}};
+        Status ->
+            {Req0, Obj, Status, #{}}
+    end;
+
 dispatch(_, Req0, Obj) ->
     {Req0, Obj, 404, #{}}.
 

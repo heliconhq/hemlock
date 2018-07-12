@@ -10,6 +10,7 @@ start(_StartType, _StartArgs) ->
             {"/ws", hemlock_ws_handler, []},
             {"/timeout/:seconds", hemlock_http_handler, [{route, timeout}]},
             {"/redirect/:times", hemlock_http_handler, [{route, redirect}]},
+            {"/status/:status_code", hemlock_http_handler, [{route, status}]},
             {"/auth/:user/:password", hemlock_http_handler, [{route, auth}]},
             {"/:method", hemlock_http_handler, [{route, method}]}
         ]}
