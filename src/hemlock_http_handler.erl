@@ -39,13 +39,13 @@ dispatch(redirect, Req0, Obj) ->
         {'EXIT', {badarg, _}} ->
             {Req0, Obj, 400, #{}};
         1 ->
-            {Req0, Obj, 302, #{ <<"location">> => <<"/get">> }};
+            {Req0, Obj, 302, #{<<"location">> => <<"/get">>}};
         N ->
             Location = <<"/redirect/", (integer_to_binary(N - 1))/binary>>,
-            {Req0, Obj, 302, #{ <<"location">> => Location }}
+            {Req0, Obj, 302, #{<<"location">> => Location}}
     end;
 
-dispatch(timeout, #{ method := Method } = Req0, Obj) ->
+dispatch(timeout, #{method := Method} = Req0, Obj) ->
     case catch binary_to_integer(cowboy_req:binding(seconds, Req0)) of
         {'EXIT', {badarg, _}} ->
             {Req0, Obj, 400, #{}};
@@ -75,7 +75,7 @@ dispatch(status, Req0, Obj) ->
 dispatch(_, Req0, Obj) ->
     {Req0, Obj, 404, #{}}.
 
-handle_method_dispatch(Path, #{ method := Method } = Req0, Obj) ->
+handle_method_dispatch(Path, #{method := Method} = Req0, Obj) ->
     case Path of
         Method when ?is_safe_http_method(Method) ->
             {Req0, Obj, 200, #{}};
@@ -85,10 +85,10 @@ handle_method_dispatch(Path, #{ method := Method } = Req0, Obj) ->
                     {Req0, Obj, 415, #{}};
                 {<<"application">>, <<"x-www-form-urlencoded">>, _} ->
                     {ok, Form, Req1} = cowboy_req:read_urlencoded_body(Req0),
-                    {Req1, Obj#{ form => Form }, 200, #{}};
+                    {Req1, Obj#{form => Form }, 200, #{}};
                 _Other ->
                     {ok, Data, Req1} = read_body(Req0),
-                    {Req1, Obj#{ data => Data }, 200, #{}}
+                    {Req1, Obj#{data => Data}, 200, #{}}
             end;
         Other when ?is_safe_http_method(Other) ->
             {Req0, Obj, 405, #{}};

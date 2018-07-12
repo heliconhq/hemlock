@@ -9,17 +9,17 @@
 init(Req, _Opts) ->
     case cowboy_req:parse_header(<<"sec-websocket-protocol">>, Req) of
         undefined ->
-            {cowboy_websocket, Req, #{ req => Req }};
+            {cowboy_websocket, Req, #{req => Req}};
         [Subprotocol|_Rest] ->
             Req1 = cowboy_req:set_resp_header(<<"sec-websocket-protocol">>,
                                               Subprotocol, Req),
-            {cowboy_websocket, Req1, #{ req => Req1 }}
+            {cowboy_websocket, Req1, #{req => Req1}}
     end.
 
 websocket_init(State) ->
     {ok, State}.
 
-websocket_handle({text, Msg}, #{ req := Req0 } = State) ->
+websocket_handle({text, Msg}, #{req := Req0} = State) ->
     Obj = #{
         headers => cowboy_req:headers(Req0),
         path => cowboy_req:path(Req0),
