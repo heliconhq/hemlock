@@ -6,13 +6,13 @@
 -export([websocket_handle/2]).
 -export([websocket_info/2]).
 
-init(Req, _Opts) ->
-    case cowboy_req:parse_header(<<"sec-websocket-protocol">>, Req) of
+init(Req0, _Opts) ->
+    case cowboy_req:parse_header(<<"sec-websocket-protocol">>, Req0) of
         undefined ->
-            {cowboy_websocket, Req, #{req => Req}};
+            {cowboy_websocket, Req0, #{req => Req0}};
         [Subprotocol|_Rest] ->
             Req1 = cowboy_req:set_resp_header(<<"sec-websocket-protocol">>,
-                                              Subprotocol, Req),
+                                              Subprotocol, Req0),
             {cowboy_websocket, Req1, #{req => Req1}}
     end.
 
